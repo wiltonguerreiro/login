@@ -7,7 +7,7 @@ while True:
     menu = int(input('''
 ----- MENU -----
 1 - Cadastrar
-2 - Entrarv
+2 - Entrar
 0 - Sair
 
 Sua escolha: '''))
