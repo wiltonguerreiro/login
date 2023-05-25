@@ -3,6 +3,30 @@ from time import sleep
 usuarios = list()
 senhas = list()
 
+def salvar_arquivos():
+    with open("usuarios.txt", "a+") as arquivo_usuarios:
+        arquivo_usuarios.seek(0) #função para colocar o cursor (o ponto de referencia) no começo do arquivo
+        conteudo = arquivo_usuarios.read() #comando para ler o que está dentro do arquivo onde salvamos os usuarios e senhas.
+
+        if not conteudo: #caso o arquivo esteja vazio
+            arquivo_usuarios.write("Usuário;Senha\n") #abre arquivo novo e escreve no começo dele
+        
+        usuarios_str = [' '.join(user) for user in usuarios] #convertendo lista de lista em lista de str
+
+        
+        for usuario in usuarios_str:
+            if usuario not in conteudo: #verifica se ja existe para evitar duplicação
+                arquivo_usuarios.write(usuario + ';' + senhas[usuarios_str.index(usuario)])
+                arquivo_usuarios.write('\n')
+
+def ler_arquivos():
+    arquivo_usuario = open("usuarios.txt", "r")
+    for linha in arquivo_usuario:
+        user_senha = linha.split(';')
+        print("usuario é", user_senha[0])
+        print("senha é", user_senha[1])
+
+
 def registrar_usuario():
     cadastrado = 0
     while cadastrado == 0:
@@ -10,7 +34,7 @@ def registrar_usuario():
         if user in usuarios:
             print('Usuário já existe.')
             while True:
-                novamente = int(input('1 - Tentar novamente\n0 - Sair\nSua opção: '))
+                novamente = int(input('1 - Tentar novamente\n0 - Sair\nOpção: '))
                 if novamente == 0:
                     break
                 elif novamente != 1:
@@ -27,9 +51,11 @@ def registrar_usuario():
                 usuarios.append(user)
                 senhas.append(senha)
                 cadastrado = 'Cadastradado com sucesso.'
+                salvar_arquivos() #chama a função para salvar o usuário em arquivo txt
 
         if cadastrado != 0:
             print(cadastrado)
+
 
     cadastrado = 0
 
@@ -55,7 +81,7 @@ def entrar_usuario():
         else:
             print('Usuário incorreto ou não cadastrado.')
             while True:
-                novamente = int(input('1 - Tentar novamente\n0 - Sair\nSua opção: '))
+                novamente = int(input('1 - Tentar novamente\n0 - Sair\nOpção: '))
                 if novamente == 0:
                     break
                 elif novamente != 0 and novamente != 1:
